@@ -15,6 +15,7 @@ After=network-online.target
 [Service]
 Type=oneshot
 WorkingDirectory=$RICE_REPO
+Environment=PATH=%h/.local/bin:%h/go/bin:%h/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 ExecStart=/usr/bin/bash $RICE_REPO/bin/rice sync --quiet
 Nice=10
 EOF
