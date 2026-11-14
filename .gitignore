@@ -10,7 +10,8 @@ Thumbs.db
 # Private runtime data (never commit)
 auth.json
 *credentials*
-*.local
+/.zshrc.local
+*.local.conf
 sessions/
 *.sqlite
 *.sqlite-shm

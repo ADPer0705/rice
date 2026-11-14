@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -uo pipefail
+
+choice=$(printf '%s\n' "Lock" "Suspend" "Reboot" "Shut down" |
+    fuzzel --dmenu --prompt "Power: " --width 16) || exit 0
+
+case "$choice" in
+    "Lock")
+        exec hyprlock
+        ;;
+    "Suspend")
+        hyprlock &
+        sleep 0.5
+        systemctl suspend
+        ;;
+    "Reboot")
+        if command -v hyprshutdown >/dev/null 2>&1; then
+            exec hyprshutdown -t 'Rebooting...' --post-cmd 'systemctl reboot'
+        else
+            exec systemctl reboot
+        fi
+        ;;
+    "Shut down")
+        if command -v hyprshutdown >/dev/null 2>&1; then
+            exec hyprshutdown -t 'Shutting down...' --post-cmd 'systemctl poweroff'
+        else
+            exec systemctl poweroff
+        fi
+        ;;
+esac
