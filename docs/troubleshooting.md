@@ -25,13 +25,26 @@ persists, run `bash bin/rice diff` to see the actual text differences.
 ## auto-cpufreq fails with `ModuleNotFoundError`
 
 A Fedora Python minor upgrade invalidates the venv in `/opt/auto-cpufreq`.
-Re-run the upstream installer (or `sudo /opt/auto-cpufreq/auto-cpufreq-installer
---install`) and restart the unit:
+On the reference machine the venv was built against Python 3.14 and Fedora
+then shipped 3.15:
 
 ```bash
+cat /opt/auto-cpufreq/venv/pyvenv.cfg   # look at the "version" line
+python3 --version
+```
+
+Re-run the upstream installer to rebuild the venv against the current Python:
+
+```bash
+git clone https://github.com/AdnanHodzic/auto-cpufreq.git /tmp/auto-cpufreq
+cd /tmp/auto-cpufreq && sudo ./auto-cpufreq-installer --install
+sudo systemctl daemon-reload
 sudo systemctl restart auto-cpufreq
 systemctl status auto-cpufreq
 ```
+
+The unit is tracked at `system/systemd/auto-cpufreq.service`, so
+`bash bin/rice system --write` reinstalls it if needed.
 
 ## The daily timer never runs
 
@@ -85,8 +98,12 @@ database and update the line; taskwarrior 3.x supports `~` expansion.
 
 ## tmux says `resurrect.tmux` is missing
 
-Bootstrap installs `~/.tmux/plugins/tmux-resurrect`. Run:
+Bootstrap installs `~/.tmux/plugins/tmux-resurrect` at the pinned commit. Run:
 
 ```bash
 bash bin/rice install
+tmux source-file ~/.tmux.conf
 ```
+
+`~/.tmux.conf` loads resurrect directly (it does not use TPM), so the plugin
+must exist before tmux starts.
