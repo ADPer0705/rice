@@ -1,0 +1,33 @@
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+
+# Private runtime data (never commit)
+auth.json
+*credentials*
+*.local
+sessions/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+
+# Logs and caches
+*.log
+*.lock
+__pycache__/
+*.pyc
+node_modules/
+venv/
+
+# Model weights / large downloads
+*.gguf
+rice-models/
+.mineru/models/
+
+# Keep placeholders for empty directories
+!.gitkeep
