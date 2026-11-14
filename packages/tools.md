@@ -55,9 +55,29 @@ git clone https://github.com/AdnanHodzic/auto-cpufreq.git
 cd auto-cpufreq && sudo ./auto-cpufreq-installer --install
 ```
 
-The wrapper lives in `/usr/local/sbin/auto-cpufreq`, the venv in
-`/opt/auto-cpufreq`, and the unit in `system/systemd/auto-cpufreq.service`.
-A Fedora Python minor upgrade breaks the venv; re-run the installer to fix.
+The installer keeps a versioned release tree and points a symlink at the
+active one:
+
+```
+/opt/auto-cpufreq/releases/<git-sha>/venv   # per-release virtualenv
+/opt/auto-cpufreq/current -> releases/<git-sha>
+/usr/local/bin/auto-cpufreq                 # wrapper
+/etc/systemd/system/auto-cpufreq.service    # tracked in system/systemd/
+```
+
+The unit runs `current/venv/bin/auto-cpufreq --daemon`, so upgrading is just
+re-running the installer; the old release is left in `releases/` for rollback.
+`/usr/local/sbin/auto-cpufreq` is a leftover duplicate from an older layout.
+
+A Fedora Python minor upgrade still invalidates the venv, because it is built
+from `/usr/bin/python3`. See `docs/troubleshooting.md` for the repair recipe,
+including the case where the installer refuses to run.
+
+### Config
+
+No `/etc/auto-cpufreq.conf` is present; the daemon uses its defaults. The
+example in `system/etc/auto-cpufreq.conf.example` shows the shape if you want
+governor/turbo overrides per charger/battery.
 
 ## Optional / documented only
 
