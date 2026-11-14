@@ -1,0 +1,19 @@
+# Captured from the reference machine (Fedora Linux 45 (KDE Plasma Desktop Edition))
+# Regenerate with: bash bin/rice sync
+
+os               Fedora Linux 45 (KDE Plasma Desktop Edition)
+kernel           7.3.3-300.fc45.x86_64
+
+hyprland         0.57.2
+waybar           Waybar v0.15.0
+fuzzel           1.15.0 +cairo +png +svg(nanosvg) -assertions
+ghostty          Ghostty 1.4.0-2.fc45
+zen-browser      Mozilla Zen 1.24.2b
+neovim           NVIM v0.12.6
+zsh              zsh 5.9.2
+tmux             tmux 3.8
+taskwarrior      3.4.2
+starship         starship 1.25.1
+uv               uv 0.11.29 (x86_64-unknown-linux-gnu)
+mineru           4.0.3
+git              2.56.1

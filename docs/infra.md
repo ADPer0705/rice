@@ -1,9 +1,11 @@
-# Web
+# Infra notes
 
-## Setting up public internet tunnel for n8n
+> Personal reference notes. Account identifiers are redacted in this public repo.
+
+## Public tunnel for n8n
 Domain : `adper.me`
 
-cloudflare account : adper0705@gmail.com
+cloudflare account : `<cloudflare-account-email>`
 cloudflare tunnel : 
 - tunnel name: `adper-tunnel`
 - Credential file (local): `/etc/cloudflared/*.json`

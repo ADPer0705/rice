@@ -1,0 +1,13 @@
+# Example /etc/auto-cpufreq.conf
+# This machine currently runs with auto-cpufreq defaults (no config file).
+# Copy to /etc/auto-cpufreq.conf and restart the service to use it.
+#
+# [charger]
+# governor = performance
+# energy_performance_preference = performance
+# turbo = auto
+#
+# [battery]
+# governor = powersave
+# energy_performance_preference = power
+# turbo = auto

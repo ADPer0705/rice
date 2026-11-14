@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+# bin/rice - one entry point for installing, deploying, capturing and checking
+# this dotfiles repo. The repo lives on NTFS, so invoke it as:
+#
+#   bash bin/rice <command>
+#
+# It is written to run from any directory.
+
+set -euo pipefail
+
+DRY_RUN=0
+
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export RICE_REPO="$REPO_DIR"
+
+# shellcheck source=../scripts/lib/common.sh
+source "$REPO_DIR/scripts/lib/common.sh"
+# shellcheck source=../scripts/lib/manifest.sh
+source "$REPO_DIR/scripts/lib/manifest.sh"
+# shellcheck source=../scripts/lib/home.sh
+source "$REPO_DIR/scripts/lib/home.sh"
+# shellcheck source=../scripts/lib/system.sh
+source "$REPO_DIR/scripts/lib/system.sh"
+# shellcheck source=../scripts/lib/sync.sh
+source "$REPO_DIR/scripts/lib/sync.sh"
+# shellcheck source=../scripts/lib/packages.sh
+source "$REPO_DIR/scripts/lib/packages.sh"
+# shellcheck source=../scripts/lib/timer.sh
+source "$REPO_DIR/scripts/lib/timer.sh"
+
+usage() {
+    cat <<EOF
+rice - ADPer's dotfiles
+
+Usage: bash bin/rice <command> [options]
+
+Commands:
+  install [--dry-run] [--no-rust]   Install packages, shell, plugins, uv/go tools
+  deploy  [--dry-run]               Copy repo configs into \$HOME (with backups)
+  sync    [--dry-run] [--no-push]   Capture \$HOME -> repo, commit, push
+  update                            git pull --rebase, then deploy
+  status                            Show drift between repo and \$HOME
+  diff                              Show unified diffs for drifted paths
+  system  [--write] [--regenerate]  Apply root-owned files (dry-run by default)
+  timer   {install|uninstall|status} Daily systemd user timer
+  fonts                             Refresh the font cache and list fonts
+  doctor                            Check dependencies, remote, mount and drift
+  help                              This message
+
+Examples:
+  bash bin/rice install
+  bash bin/rice deploy --dry-run
+  bash bin/rice sync --no-push
+  bash bin/rice system --write --regenerate
+
+Notes:
+  - This repo is on NTFS; use "bash bin/rice", not "bin/rice".
+  - deploy is copy-based, not symlink-based, because of the cross-filesystem mount.
+EOF
+}
+
+cmd_fonts() {
+    if have fc-cache; then fc-cache -f; ok "font cache refreshed"; fi
+    if have fc-list; then
+        info "JetBrainsMono faces:"
+        fc-list | grep -i 'JetBrainsMono' | sed 's/^/  /' || true
+    fi
+}
+
+cmd_doctor() {
+    info "repo: $RICE_REPO"
+    if [[ -d "$RICE_REPO/.git" ]]; then
+        ok "git repository"
+        git -C "$RICE_REPO" remote -v | sed 's/^/  /' || true
+        printf '  branch: %s\n' "$(git -C "$RICE_REPO" branch --show-current)"
+        printf '  head:   %s\n' "$(git -C "$RICE_REPO" log -1 --oneline 2>/dev/null || echo none)"
+    else
+        err "not a git repository"
+    fi
+
+    if findmnt -T "$RICE_REPO" -o FSTYPE -n 2>/dev/null | grep -q fuse; then
+        warn "repo is on a FUSE/NTFS mount; exec bits are not reliable (run scripts with bash)"
+    else
+        ok "repo filesystem: $(findmnt -T "$RICE_REPO" -o FSTYPE -n 2>/dev/null || echo unknown)"
+    fi
+
+    local c
+    for c in rsync git dnf flatpak zsh tmux nvim starship task; do
+        if have "$c"; then printf '  ok   %s\n' "$c"; else printf '  --   %s missing\n' "$c"; fi
+    done
+
+    echo
+    if status_home; then :; fi
+
+    echo
+    if systemctl --user is-enabled rice-sync.timer >/dev/null 2>&1; then
+        ok "rice-sync.timer enabled"
+        systemctl --user list-timers rice-sync.timer --no-pager 2>/dev/null | sed 's/^/  /' || true
+    else
+        warn "rice-sync.timer not installed (bash bin/rice timer install)"
+    fi
+}
+
+main() {
+    local cmd="${1:-help}"
+    shift || true
+    case "$cmd" in
+        install) install_all "$@" ;;
+        deploy)  deploy_home "$@" ;;
+        sync)    sync_all "$@" ;;
+        update)
+            require_repo
+            git -C "$RICE_REPO" pull --rebase --autostash
+            deploy_home
+            ;;
+        status)  status_home ;;
+        diff)    diff_home ;;
+        system)  system_apply "$@" ;;
+        timer)   timer_cmd "$@" ;;
+        fonts)   cmd_fonts ;;
+        doctor)  cmd_doctor ;;
+        help|-h|--help) usage ;;
+        *) err "unknown command: $cmd"; echo; usage; exit 2 ;;
+    esac
+}
+
+main "$@"

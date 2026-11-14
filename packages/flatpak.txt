@@ -1,0 +1,3 @@
+# Flatpak applications
+md.obsidian.Obsidian
+org.telegram.desktop

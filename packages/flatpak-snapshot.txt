@@ -1,0 +1,2 @@
+md.obsidian.Obsidian	flathub
+org.telegram.desktop	flathub

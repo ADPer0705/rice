@@ -1,0 +1,69 @@
+# Curated Fedora packages for this setup.
+# Installed with: sudo dnf install -y $(grep -v '^#' packages/dnf.txt | grep -v '^$')
+#
+# This is intentionally not the full 8800-package snapshot; it is the stack
+# that this repo configures plus its direct utilities.
+
+# ── Shell / terminal ─────────────────────────────────────────
+zsh
+tmux
+ghostty
+kitty
+starship
+
+# ── Window manager / desktop ─────────────────────────────────
+hyprland
+hyprpaper
+hypridle
+hyprlock
+hyprshutdown
+hyprland-guiutils
+waybar
+fuzzel
+mako
+lxqt-policykit
+polkit
+xdg-desktop-portal-hyprland
+
+# ── Wayland utilities ────────────────────────────────────────
+wl-clipboard
+grim
+slurp
+playerctl
+pavucontrol
+brightnessctl
+
+# ── Editor ───────────────────────────────────────────────────
+neovim
+
+# ── Task / productivity ──────────────────────────────────────
+task
+pandoc
+
+# ── Browser ──────────────────────────────────────────────────
+zen-browser
+
+# ── Languages / build tooling ────────────────────────────────
+python3
+golang
+nodejs22-bin
+nodejs22-npm-bin
+
+# ── CLI quality of life ──────────────────────────────────────
+git
+curl
+wget
+jq
+ripgrep
+fd-find
+fzf
+bat
+fastfetch
+htop
+tree
+unzip
+tar
+xz
+rsync
+fontconfig
+man-db

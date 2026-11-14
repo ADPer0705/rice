@@ -1,0 +1,3 @@
+# Pinned Go binaries
+golang.org/x/tools/gopls@v0.23.0
+golang.org/x/tools/cmd/goimports@v0.51.0

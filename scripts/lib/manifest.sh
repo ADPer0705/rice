@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+# shellcheck shell=bash
+# Manifest of everything that is copied between this repo and $HOME.
+#
+# Format: type|repo path|path under $HOME|flags
+#   type  = file | dir | zen
+#   flags = comma separated; currently "delete" (mirror deletes) is supported
+#
+# The repo lives on an NTFS mount, so deployment is copy-based (rsync) rather
+# than symlink-based. Keep entries explicit; bin/rice sync mirrors these paths
+# back into the repo.
+
+RICE_MANIFEST=(
+    "file|home/.local/bin/power-menu|.local/bin/power-menu|exec"
+    "file|home/.zshrc|.zshrc|"
+    "file|home/.tmux.conf|.tmux.conf|"
+    "file|home/.taskrc|.taskrc|"
+
+    "dir|home/.config/nvim|.config/nvim|delete"
+    "dir|home/.config/hypr|.config/hypr|delete"
+    "dir|home/.config/waybar|.config/waybar|delete"
+    "dir|home/.config/fuzzel|.config/fuzzel|delete"
+    "dir|home/.config/ghostty|.config/ghostty|delete"
+    "dir|home/.config/fontconfig|.config/fontconfig|delete"
+    "file|home/.config/starship.toml|.config/starship.toml|"
+
+    "file|home/mineru.json|mineru.json|"
+    "file|home/.mineru/config.yaml|.mineru/config.yaml|"
+
+    "zen|home/.zen/profile|.zen/profile|"
+
+    "dir|assets/fonts|.local/share/fonts|"
+    "dir|assets/icons/Catppuccin-Mocha-Blue-Cursors|.local/share/icons/Catppuccin-Mocha-Blue-Cursors|"
+    "dir|assets/icons/Catppuccin-Mocha-Dark-Cursors|.local/share/icons/Catppuccin-Mocha-Dark-Cursors|"
+    "dir|assets/icons/Catppuccin-Mocha-Sky-Cursors|.local/share/icons/Catppuccin-Mocha-Sky-Cursors|"
+)
+
+# Curated files inside a Zen profile. Never copy cookies, history, logins or
+# the whole profile: it contains credentials and hundreds of MB of state.
+RICE_ZEN_FILES=(
+    "chrome/zen-themes.css"
+    "zen-themes.json"
+    "containers.json"
+    "extension-preferences.json"
+    "user.js"
+)

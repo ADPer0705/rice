@@ -1,0 +1,7 @@
+# name|url|commit
+# Commits captured from the reference machine. New installs check out the pin;
+# existing clones are left alone so local updates are never clobbered.
+fzf-tab|https://github.com/Aloxaf/fzf-tab|e394092
+zsh-autosuggestions|https://github.com/zsh-users/zsh-autosuggestions|85919cd
+zsh-completions|https://github.com/zsh-users/zsh-completions|64f8029
+zsh-syntax-highlighting|https://github.com/zsh-users/zsh-syntax-highlighting|1d85c69

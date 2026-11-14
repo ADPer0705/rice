@@ -1,0 +1,9 @@
+# Pinned uv tools (name==version)
+mineru==4.0.3
+semgrep==1.177.0
+semgrep-mcp==0.9.0
+sempropos==0.3.0
+kaggle==2.2.4
+merklewatch==1.0.0
+quaerite==0.1.1
+transformers==5.21.0

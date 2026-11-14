@@ -1,0 +1,4 @@
+# COPR repositories required by packages/dnf.txt
+scottames/ghostty
+lionheartp/Hyprland
+sneexy/zen-browser

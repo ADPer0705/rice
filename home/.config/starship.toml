@@ -1,0 +1,44 @@
+# Starship config — Stark-worthy prompt
+format = """
+[╭─](bold green)$os$username$hostname$directory$git_branch$git_status$python$rust$nodejs$cmd_duration
+[╰─](bold green)$character"""
+
+[os]
+disabled = false
+style = "bold blue"
+
+[username]
+show_always = false
+style_user = "bold green"
+
+[directory]
+truncation_length = 3
+truncate_to_repo = true
+style = "bold cyan"
+
+[git_branch]
+symbol = " "
+style = "bold purple"
+
+[git_status]
+style = "bold red"
+
+[python]
+symbol = " "
+style = "bold yellow"
+
+[rust]
+symbol = " "
+style = "bold orange"
+
+[nodejs]
+symbol = " "
+style = "bold green"
+
+[cmd_duration]
+min_time = 2_000
+format = "took [$duration](bold yellow) "
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
