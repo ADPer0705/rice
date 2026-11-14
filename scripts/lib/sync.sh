@@ -27,6 +27,8 @@ _versions_file() {
         printf '%-16s %s\n' "starship" "$(starship --version 2>/dev/null | head -1)"
         printf '%-16s %s\n' "uv" "$(uv --version 2>/dev/null)"
         printf '%-16s %s\n' "mineru" "$(mineru --version 2>/dev/null | head -1 | sed 's/MinerU version: //')"
+        printf '%-16s %s\n' "auto-cpufreq" \
+            "$(auto-cpufreq --version 2>/dev/null | sed -n 's/^auto-cpufreq version: //p')"
         printf '%-16s %s\n' "git" "$(git --version 2>/dev/null | awk '{print $3}')"
     } > "$RICE_REPO/packages/versions.txt"
 }
