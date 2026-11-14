@@ -14,6 +14,6 @@ zsh              zsh 5.9.2
 tmux             tmux 3.8
 taskwarrior      3.4.2
 starship         starship 1.25.1
-uv               uv 0.11.29 (x86_64-unknown-linux-gnu)
-mineru           4.0.3
+uv               
+mineru           
 git              2.56.1
