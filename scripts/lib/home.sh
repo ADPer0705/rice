@@ -101,6 +101,13 @@ _deploy_zen() {
 }
 
 deploy_home() {
+    local arg
+    for arg in "$@"; do
+        case "$arg" in
+            --dry-run) DRY_RUN=1 ;;
+            *) die "unknown deploy option: $arg" ;;
+        esac
+    done
     ensure_state
     info "deploying configs into $HOME"
     local entry type src dest flags
@@ -111,13 +118,7 @@ deploy_home() {
         case "$type" in
             file) _deploy_file "$src" "$dest" "$flags" ;;
             dir)  _deploy_dir "$src" "$dest" "$flags" ;;
-            zen)
-                if [[ -z "$(resolve_zen_profile)" ]]; then
-                    _deploy_zen "$src"
-                else
-                    _deploy_zen "$src"
-                fi
-                ;;
+            zen)  _deploy_zen "$src" ;;
             *) warn "unknown manifest type: $type" ;;
         esac
     done

@@ -52,7 +52,10 @@ refresh_snapshots() {
             bash -c "flatpak list --app --columns=application,origin 2>/dev/null | sort"
     fi
     if have uv; then
-        _snapshot_file "$RICE_REPO/packages/uv-tools-snapshot.txt" uv tool list
+        # `uv tool list` warns about malformed tools on stderr; keep the
+        # snapshot deterministic by capturing stdout only.
+        _snapshot_file "$RICE_REPO/packages/uv-tools-snapshot.txt" \
+            bash -c "uv tool list 2>/dev/null"
     fi
 }
 

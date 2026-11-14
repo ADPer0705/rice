@@ -5,13 +5,25 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+DRY_RUN=0
+for arg in "$@"; do
+    case "$arg" in
+        --dry-run) DRY_RUN=1 ;;
+    esac
+done
+
 echo
 echo "  ⛩  ADPer's rice - bootstrap"
 echo "  repo: $REPO_DIR"
 echo
 
 bash "$REPO_DIR/bin/rice" install "$@"
-bash "$REPO_DIR/bin/rice" deploy
+
+if [[ "$DRY_RUN" == 1 ]]; then
+    bash "$REPO_DIR/bin/rice" deploy --dry-run
+else
+    bash "$REPO_DIR/bin/rice" deploy
+fi
 
 cat <<'EOF'
 
