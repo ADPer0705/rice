@@ -2,7 +2,7 @@
 This repo contains the bash scripts I wrote to automate tasks.
 
 ```bash
-fed_fuck_windows_updates.sh
+fed_fix.sh
 ```
 This is for when windows rolls an update, and it messes with my dual-boot setup. Currently it does the following things : 
 - Fixes the LUKS2 + TPM2 Disc Encryption Auto Unlock setup.
