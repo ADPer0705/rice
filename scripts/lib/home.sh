@@ -37,16 +37,29 @@ _deploy_file() {
         warn "missing in repo: ${src#"$RICE_REPO"/}"
         return 0
     fi
-    if [[ -f "$dest" ]] && same_file "$src" "$dest"; then
+    local rendered="" cmp_src="$src"
+    if [[ ",$flags," == *",template,"* ]]; then
+        rendered="$(mktemp)"
+        sed "s#\${HOME}#$HOME#g" "$src" > "$rendered"
+        cmp_src="$rendered"
+    fi
+    if [[ -f "$dest" ]] && same_file "$cmp_src" "$dest"; then
+        [[ -n "$rendered" ]] && rm -f "$rendered"
         return 0
     fi
     if [[ "$DRY_RUN" == 1 ]]; then
         dim "  would copy ${src#"$RICE_REPO"/} -> $dest"
+        [[ -n "$rendered" ]] && rm -f "$rendered"
         return 0
     fi
     mkdir -p "$(dirname "$dest")"
     backup_target "$dest"
-    cp -a "$src" "$dest"
+    if [[ -n "$rendered" ]]; then
+        cp -a "$rendered" "$dest"
+        rm -f "$rendered"
+    else
+        cp -a "$src" "$dest"
+    fi
     [[ ",$flags," == *",exec,"* ]] && chmod 0755 "$dest"
     ok "deployed $dest"
 }
@@ -116,9 +129,22 @@ deploy_home() {
 }
 
 _sync_file() {
-    local src="$1" dest="$2"
+    local src="$1" dest="$2" flags="${3:-}"
     if [[ ! -f "$dest" ]]; then
         warn "not present on this machine: $dest"
+        return 0
+    fi
+    if [[ ",$flags," == *",template,"* ]]; then
+        if [[ -f "$src" ]] && cmp -s <(sed "s#\${HOME}#$HOME#g" "$src") "$dest"; then
+            return 0
+        fi
+        if [[ "$DRY_RUN" == 1 ]]; then
+            dim "  would capture $dest -> ${src#"$RICE_REPO"/}"
+            return 0
+        fi
+        mkdir -p "$(dirname "$src")"
+        sed "s#$HOME#\${HOME}#g" "$dest" > "$src"
+        ok "captured $dest"
         return 0
     fi
     if [[ -f "$src" ]] && same_file "$src" "$dest"; then
@@ -178,7 +204,7 @@ sync_home() {
         src="$RICE_REPO/$src"
         dest="$HOME/$dest"
         case "$type" in
-            file) _sync_file "$src" "$dest" ;;
+            file) _sync_file "$src" "$dest" "$flags" ;;
             dir)  _sync_dir "$src" "$dest" "$flags" ;;
             zen)  _sync_zen "$src" ;;
             *) warn "unknown manifest type: $type" ;;
@@ -206,11 +232,15 @@ status_home() {
         dest="$HOME/$dest"
         case "$type" in
             file)
-                if [[ -f "$src" && -f "$dest" ]] && same_file "$src" "$dest"; then
-                    _status_one "$dest" 1 || drift=$((drift + 1))
-                else
-                    _status_one "$dest" 0 || drift=$((drift + 1))
+                local clean=0
+                if [[ -f "$src" && -f "$dest" ]]; then
+                    if [[ ",$flags," == *",template,"* ]]; then
+                        cmp -s <(render_template "$src") "$dest" && clean=1
+                    else
+                        same_file "$src" "$dest" && clean=1
+                    fi
                 fi
+                _status_one "$dest" "$clean" || drift=$((drift + 1))
                 ;;
             dir)
                 local -a opts=(-a "${RICE_RSYNC_FLAGS[@]}")
@@ -254,9 +284,17 @@ diff_home() {
         dest="$HOME/$dest"
         case "$type" in
             file)
-                if [[ -f "$src" && -f "$dest" ]] && ! same_file "$src" "$dest"; then
-                    info "diff $dest"
-                    diff -u --label "repo:$src" --label "live:$dest" "$src" "$dest" || true
+                if [[ -f "$src" && -f "$dest" ]]; then
+                    if [[ ",$flags," == *",template,"* ]]; then
+                        if ! cmp -s <(render_template "$src") "$dest"; then
+                            info "diff $dest"
+                            diff -u --label "repo:$src" --label "live:$dest" \
+                                <(render_template "$src") "$dest" || true
+                        fi
+                    elif ! same_file "$src" "$dest"; then
+                        info "diff $dest"
+                        diff -u --label "repo:$src" --label "live:$dest" "$src" "$dest" || true
+                    fi
                 fi
                 ;;
             dir)

@@ -56,6 +56,11 @@ same_file() {
     cmp -s "$1" "$2" 2>/dev/null
 }
 
+# Render a repo file with ${HOME} substituted for the current user.
+render_template() {
+    sed "s#\${HOME}#$HOME#g" "$1"
+}
+
 # Return 0 when an rsync copy would change nothing. $@ is passed to rsync.
 rsync_is_clean() {
     local out

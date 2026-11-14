@@ -24,7 +24,7 @@ RICE_MANIFEST=(
     "dir|home/.config/fontconfig|.config/fontconfig|delete"
     "file|home/.config/starship.toml|.config/starship.toml|"
 
-    "file|home/mineru.json|mineru.json|"
+    "file|home/mineru.json|mineru.json|template"
     "file|home/.mineru/config.yaml|.mineru/config.yaml|"
 
     "zen|home/.zen/profile|.zen/profile|"
