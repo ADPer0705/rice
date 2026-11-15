@@ -98,11 +98,11 @@ hl.config({
         gaps_in     = 6,
         gaps_out    = 12,
         border_size = 2,
-        col = {
+        col         = {
             active_border   = { colors = { "rgba(00f0ffee)", "rgba(0066ffee)", "rgba(00f0ffee)" }, angle = 45 },
             inactive_border = "rgba(0d2538aa)",
         },
-        layout = "dwindle",
+        layout      = "dwindle",
     },
     decoration = {
         rounding = 6,
@@ -128,7 +128,7 @@ hl.config({
     input = {
         kb_layout    = "us",
         follow_mouse = 0,
-        touchpad = {
+        touchpad     = {
             natural_scroll = true,
         },
     },
@@ -139,20 +139,22 @@ hl.config({
 local mainMod = "SUPER"
 
 -- Apps & window controls
-hl.bind(mainMod .. " + T",         hl.dsp.exec_cmd(terminal),               { description = "Open Ghostty" })
-hl.bind(mainMod .. " + D",         hl.dsp.exec_cmd(menu),                   { description = "Open Fuzzel launcher" })
-hl.bind(mainMod .. " + Q",         hl.dsp.window.close(),                   { description = "Close active window" })
-hl.bind(mainMod .. " + Escape",    hl.dsp.exec_cmd("$HOME/.local/bin/power-menu"), { description = "Power menu" })
-hl.bind(mainMod .. " + V",         hl.dsp.window.float({ action = "toggle" }))
-hl.bind(mainMod .. " + F",         hl.dsp.window.fullscreen({ mode = "maximized" }))  -- Maximize with bar/gaps
-hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen" }))  -- True fullscreen
-hl.bind(mainMod .. " + S",         hl.dsp.layout("togglesplit"))
-hl.bind(mainMod .. " + ALT + L",   hl.dsp.exec_cmd("pidof hyprlock >/dev/null || hyprlock"))
+hl.bind(mainMod .. " + T", hl.dsp.exec_cmd(terminal), { description = "Open Ghostty" })
+hl.bind(mainMod .. " + D", hl.dsp.exec_cmd(menu), { description = "Open Fuzzel launcher" })
+hl.bind(mainMod .. " + Q", hl.dsp.window.close(), { description = "Close active window" })
+hl.bind(mainMod .. " + Escape", hl.dsp.exec_cmd("$HOME/.local/bin/power-menu"), { description = "Power menu" })
+hl.bind(mainMod .. " + V", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = "maximized" }))          -- Maximize with bar/gaps
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen({ mode = "fullscreen" })) -- True fullscreen
+hl.bind(mainMod .. " + S", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + ALT + L", hl.dsp.exec_cmd("pidof hyprlock >/dev/null || hyprlock"))
 
 -- Screenshots (region -> clipboard + ~/Pictures/Screenshots)
-hl.bind("Print",               hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
-hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
-hl.bind("CTRL + Print",        hl.dsp.exec_cmd('grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
+hl.bind("Print",
+    hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
+hl.bind(mainMod .. " + SHIFT + S",
+    hl.dsp.exec_cmd('grim -g "$(slurp)" - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
+hl.bind("CTRL + Print", hl.dsp.exec_cmd('grim - | tee ~/Pictures/Screenshots/$(date +%Y-%m-%d_%H-%M-%S).png | wl-copy'))
 
 -- Vim-style focus & window movement
 hl.bind(mainMod .. " + H", hl.dsp.focus({ direction = "left" }))
@@ -167,13 +169,13 @@ hl.bind(mainMod .. " + CTRL + J", hl.dsp.window.move({ direction = "down" }))
 
 -- Switch desktops (1-9) & move active window to desktop (1-9)
 for i = 1, 9 do
-    hl.bind(mainMod .. " + " .. i,             hl.dsp.focus({ workspace = i }))
-    hl.bind(mainMod .. " + SHIFT + " .. i,     hl.dsp.window.move({ workspace = i }))
+    hl.bind(mainMod .. " + " .. i, hl.dsp.focus({ workspace = i }))
+    hl.bind(mainMod .. " + SHIFT + " .. i, hl.dsp.window.move({ workspace = i }))
 end
 
 -- Cycle through desktops that currently exist (wraps around)
 hl.bind(mainMod .. " + mouse_down", hl.dsp.focus({ workspace = "e+1" }))
-hl.bind(mainMod .. " + mouse_up",   hl.dsp.focus({ workspace = "e-1" }))
+hl.bind(mainMod .. " + mouse_up", hl.dsp.focus({ workspace = "e-1" }))
 
 -- Go to the next free desktop (reuses an empty fixed one, otherwise creates a new one)
 hl.bind(mainMod .. " + ALT + N", hl.dsp.focus({ workspace = "emptynm" }))
@@ -229,12 +231,18 @@ hl.bind(mainMod .. " + CTRL + grave", function()
 end, { description = "Pull window out of scratchpad" })
 
 -- Mouse move/resize fallback (Super + Left/Right drag)
-hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(),   { mouse = true })
+hl.bind(mainMod .. " + mouse:272", hl.dsp.window.drag(), { mouse = true })
 hl.bind(mainMod .. " + mouse:273", hl.dsp.window.resize(), { mouse = true })
 
 -- Volume & brightness keys
-hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume",  hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
-hl.bind("XF86AudioMute",         hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"),
+    { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),
+    { locked = true, repeating = true })
+hl.bind("XF86AudioMute", hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),
+    { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"), { locked = true, repeating = true })
+
+-- gnome keyring
+hl.exec_cmd("/usr/bin/gnome-keyring-daemon --start --components=pkcs11,secrets,ssh")

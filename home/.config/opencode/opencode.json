@@ -1,0 +1,36 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "outpost": {
+        "type": "remote",
+        "url": "http://127.0.0.1:8090/mcp",
+        "oauth": false,
+        "codemode": false,
+        "headers": {
+          "Authorization": "Bearer {file:~/.secrets/outpost.token}"
+        },
+        "timeout": {
+          "startup": 30000,
+          "catalog": 30000,
+          "execution": 120000
+        }
+      },
+      "playwright": {
+        "type": "local",
+        "command": [
+          "npx",
+          "-y",
+          "@playwright/mcp@latest",
+          "--user-data-dir",
+          "/home/adper/.cache/ms-playwright/opencode-profile",
+          "--viewport-size",
+          "1280x720"
+        ],
+        "timeout": {
+          "startup": 120000
+        }
+      }
+    }
+  }
+}

@@ -777,6 +777,7 @@ gnome-epub-thumbnailer
 gnome-font-viewer
 gnome-initial-setup
 gnome-keyring
+gnome-keyring-pam
 gnome-logs
 gnome-maps
 gnome-menus

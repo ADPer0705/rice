@@ -87,7 +87,7 @@ _secret_scan() {
     diff="$(git -C "$RICE_REPO" diff --cached -U0 -- . ':(exclude)packages/dnf-snapshot.txt' || true)"
     [[ -z "$diff" ]] && return 0
     local hits
-    hits="$(printf '%s\n' "$diff" | grep -nE '^\+[^+].*(sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' || true)"
+    hits="$(printf '%s\n' "$diff" | grep -nE '^\+[^+].*(sk-[A-Za-z0-9_-]{20,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|Bearer [A-Za-z0-9._~+\/-]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----)' || true)"
     if [[ -n "$hits" ]]; then
         err "possible secret in staged changes:"
         printf '%s\n' "$hits" >&2

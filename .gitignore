@@ -16,6 +16,10 @@ sessions/
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
+*.db
+*.db-shm
+*.db-wal
+home/.config/opencode/service.json
 
 # Logs and caches
 *.log

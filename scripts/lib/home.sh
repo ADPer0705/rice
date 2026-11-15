@@ -8,6 +8,21 @@ DRY_RUN="${DRY_RUN:-0}"
 # copy content only; file modes are handled by git's index and .gitattributes.
 RICE_RSYNC_FLAGS=(--no-perms --no-owner --no-group)
 
+# Append --exclude arguments for every "exclude=<glob>" token in a manifest
+# flags string. Excluded paths never enter the repo, and rsync's --delete
+# leaves them alone in $HOME, so runtime secrets (service.json) survive a
+# mirroring deploy.
+_add_manifest_excludes() {
+    local -n _target_array="$1"
+    local flags="$2" part
+    local -a parts=()
+    IFS=',' read -ra parts <<<"$flags"
+    for part in "${parts[@]}"; do
+        [[ "$part" == exclude=?* ]] || continue
+        _target_array+=("--exclude=${part#exclude=}")
+    done
+}
+
 # Locate the newest Zen profile directory. Returns an empty string when Zen
 # has never been launched; in that case deploy tells the user to launch it once.
 resolve_zen_profile() {
@@ -67,6 +82,7 @@ _deploy_file() {
 _deploy_dir() {
     local src="$1" dest="$2" flags="$3"
     local -a opts=(-a "${RICE_RSYNC_FLAGS[@]}")
+    _add_manifest_excludes opts "$flags"
     [[ ",$flags," == *",delete,"* ]] && opts+=(--delete)
     if [[ ! -d "$src" ]]; then
         warn "missing in repo: ${src#"$RICE_REPO"/}"
@@ -168,6 +184,7 @@ _sync_dir() {
         return 0
     fi
     local -a opts=(-a "${RICE_RSYNC_FLAGS[@]}" --exclude=.git/ --exclude='*.log' --exclude='*.swp' --exclude='*~')
+    _add_manifest_excludes opts "$flags"
     [[ ",$flags," == *",delete,"* ]] && opts+=(--delete)
     if rsync_is_clean "${opts[@]}" "$dest/" "$src/"; then
         return 0
@@ -245,6 +262,7 @@ status_home() {
                 ;;
             dir)
                 local -a opts=(-a "${RICE_RSYNC_FLAGS[@]}")
+                _add_manifest_excludes opts "$flags"
                 [[ ",$flags," == *",delete,"* ]] && opts+=(--delete)
                 if [[ -d "$src" && -d "$dest" ]] && rsync_is_clean "${opts[@]}" "$src/" "$dest/"; then
                     _status_one "$dest/" 1 || drift=$((drift + 1))
@@ -300,9 +318,10 @@ diff_home() {
                 ;;
             dir)
                 if [[ -d "$src" && -d "$dest" ]]; then
-                    local -a opts=(-ru)
+                    local -a opts=(-ru --exclude=.git --exclude='*.log')
+                    _add_manifest_excludes opts "$flags"
                     info "diff $dest/"
-                    diff "${opts[@]}" --exclude=.git --exclude='*.log' "$src" "$dest" || true
+                    diff "${opts[@]}" "$src" "$dest" || true
                 fi
                 ;;
             zen)
