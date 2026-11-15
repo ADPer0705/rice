@@ -23,6 +23,8 @@ source "$REPO_DIR/scripts/lib/home.sh"
 source "$REPO_DIR/scripts/lib/system.sh"
 # shellcheck source=../scripts/lib/sync.sh
 source "$REPO_DIR/scripts/lib/sync.sh"
+# shellcheck source=../scripts/lib/backup.sh
+source "$REPO_DIR/scripts/lib/backup.sh"
 # shellcheck source=../scripts/lib/packages.sh
 source "$REPO_DIR/scripts/lib/packages.sh"
 # shellcheck source=../scripts/lib/timer.sh
@@ -38,6 +40,7 @@ Commands:
   install [--dry-run] [--no-rust]   Install packages, shell, plugins, uv/go tools
   deploy  [--dry-run]               Copy repo configs into \$HOME (with backups)
   sync    [--dry-run] [--no-push]   Capture \$HOME -> repo, commit, push
+  backup  [--no-release] [--verify] Publish a secret-free OpenCode config bundle
   update                            git pull --rebase, then deploy
   status                            Show drift between repo and \$HOME
   diff                              Show unified diffs for drifted paths
@@ -99,6 +102,20 @@ cmd_doctor() {
     else
         warn "rice-sync.timer not installed (bash bin/rice timer install)"
     fi
+
+    echo
+    local token="$HOME/.secrets/outpost.token"
+    if [[ -f "$token" && -s "$token" ]]; then
+        ok "outpost token present ($(wc -c <"$token" | tr -d ' ') bytes)"
+    else
+        warn "outpost token missing or empty: $token"
+        warn "config references {file:~/.secrets/outpost.token}; outpost will 401"
+    fi
+    if grep -rqE 'Bearer [A-Za-z0-9._~+/-]{20,}' "$HOME/.config/opencode" 2>/dev/null; then
+        err "inline bearer token found in ~/.config/opencode"
+    else
+        ok "no inline bearer tokens in OpenCode config"
+    fi
 }
 
 main() {
@@ -108,6 +125,7 @@ main() {
         install) install_all "$@" ;;
         deploy)  deploy_home "$@" ;;
         sync)    sync_all "$@" ;;
+        backup)  opencode_backup "$@" ;;
         update)
             require_repo
             git -C "$RICE_REPO" pull --rebase --autostash

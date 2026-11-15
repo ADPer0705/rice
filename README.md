@@ -29,6 +29,7 @@ captured.
 | Multiplexer | [tmux](https://github.com/tmux/tmux) + resurrect | `home/.tmux.conf` |
 | Editor | [Neovim](https://neovim.io/) (lazy.nvim) | `home/.config/nvim/` |
 | Tasks | [Taskwarrior](https://taskwarrior.org/) | `home/.taskrc` |
+| AI agent | [OpenCode](https://opencode.ai/) | `home/.config/opencode/` |
 | Browser | [Zen](https://zen-browser.app/) | `home/.zen/profile/` |
 | Documents | [MinerU](https://github.com/opendatalab/MinerU) | `home/mineru.json` |
 | Fonts / cursors | JetBrainsMono NF, Catppuccin Mocha | `assets/` |
@@ -37,7 +38,7 @@ captured.
 
 Detailed notes live in [`docs/`](docs/): [install](docs/install.md),
 [keybindings](docs/keybinds.md), [theming](docs/theming.md),
-[Zen](docs/zen.md), [MinerU](docs/mineru.md),
+[Zen](docs/zen.md), [MinerU](docs/mineru.md), [OpenCode](docs/opencode.md),
 [troubleshooting](docs/troubleshooting.md).
 
 ## Quick start

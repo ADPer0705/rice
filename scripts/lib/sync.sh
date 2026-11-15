@@ -150,5 +150,17 @@ sync_all() {
     sync_home
     sync_extras
     refresh_snapshots
+    local head_before head_after
+    head_before="$(git -C "$RICE_REPO" rev-parse -q --verify HEAD 2>/dev/null || true)"
     git_capture
+    head_after="$(git -C "$RICE_REPO" rev-parse -q --verify HEAD 2>/dev/null || true)"
+
+    # Publish a fresh OpenCode config bundle only when this commit touched it.
+    # opencode_backup dedupes on content, so an unchanged config is a no-op.
+    if [[ "$DRY_RUN" == 0 && -n "$head_before" && "$head_before" != "$head_after" ]]; then
+        if git -C "$RICE_REPO" diff --name-only "$head_before" "$head_after" -- \
+            home/.config/opencode home/.local/state/opencode | grep -q .; then
+            opencode_backup
+        fi
+    fi
 }
