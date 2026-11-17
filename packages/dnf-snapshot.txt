@@ -1428,8 +1428,8 @@ kmenuedit
 kmines
 kmod
 kmod-libs
-kmod-nvidia-7.3.3-200.fc44.x86_64
 kmod-nvidia-7.3.3-300.fc45.x86_64
+kmod-nvidia-7.3.4-300.fc45.x86_64
 kmodtool
 kmouth
 kmscon

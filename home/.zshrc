@@ -252,27 +252,6 @@ alias python='python3'
 alias pip='pip3'
 
 # ─────────────────────────────────────────
-#  App aliases
-# ─────────────────────────────────────────
-alias notion='nohup google-chrome \
-  --profile-directory="Default" \
-  --app=https://www.notion.so > /dev/null 2>&1 & disown'
-
-alias excalidraw='nohup google-chrome \
-  --app=https://excalidraw.com \
-  --profile-directory=Default > /dev/null 2>&1 & disown'
-
-alias chatgpt='nohup google-chrome \
-  --app=https://chat.openai.com/ \
-  --profile-directory=Default > /dev/null 2>&1 & disown'
-
-alias perplexity='nohup google-chrome \
-  --app=https://www.perplexity.ai/ \
-  --profile-directory=Default > /dev/null 2>&1 & disown'
-
-alias telegram='nohup telegram-desktop > /dev/null 2>&1 & disown'
-
-# ─────────────────────────────────────────
 #  Developer tools
 # ─────────────────────────────────────────
 alias vim='nvim'

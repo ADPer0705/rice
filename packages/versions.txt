@@ -5,7 +5,8 @@ os               Fedora Linux 45 (KDE Plasma Desktop Edition)
 kernel           7.3.3-300.fc45.x86_64
 
 hyprland         0.57.2
-waybar           Waybar v0.15.0
+waybar           [2026-11-17 18:06:15.402] [info] JOURNAL_STREAM does not point to stderr, logging to console
+Waybar v0.16.0
 fuzzel           1.15.0 +cairo +png +svg(nanosvg) -assertions
 ghostty          Ghostty 1.4.0-2.fc45
 zen-browser      Mozilla Zen 1.24.2b
