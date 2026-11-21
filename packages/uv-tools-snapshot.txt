@@ -1,4 +1,4 @@
-kaggle v2.2.4
+kaggle v2.2.5
 - kaggle
 merklewatch v1.0.0
 - merklewatch
