@@ -1,3 +1,6 @@
+huggingface-hub v2.4.0
+- hf
+- tiny-agents
 kaggle v2.2.5
 - kaggle
 merklewatch v1.0.0

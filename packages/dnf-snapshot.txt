@@ -395,6 +395,7 @@ ddcutil
 ddrescue
 debugedit
 decibels
+dee
 default-editor
 default-fonts-am
 default-fonts-ar
@@ -480,6 +481,7 @@ device-mapper-multipath-libs
 device-mapper-persistent-data
 dhcpcd
 diffutils
+discord
 dislocker
 dislocker-libs
 distribution-gpg-keys
@@ -2067,6 +2069,7 @@ libudisks2
 libultrahdr
 libunibreak
 libunistring
+libunity
 libunity-gtk3-parser
 libunwind
 liburing
