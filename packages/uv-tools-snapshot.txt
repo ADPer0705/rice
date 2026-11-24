@@ -20,7 +20,10 @@ semgrep v1.177.0
 - semgrep
 semgrep-mcp v0.9.0
 - semgrep-mcp
-sempropos v0.3.0
+sempropos v1.0.0
 - sem
 transformers v5.21.0
 - transformers
+volatility3 v2.28.2
+- vol
+- volshell
