@@ -318,6 +318,35 @@ export PATH=$PATH:$(go env GOPATH)/bin
 # rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
+# android
+export ANDROID_HOME="$HOME/Android/Sdk/"
+export PATH="$PATH:$ANDROID_HOME/platform-tools"
+
+# system update
+sysup() {
+    echo "==> DNF"
+    sudo dnf upgrade --refresh -y
+
+    echo "==> Flatpak (user & system)"
+    flatpak update --user -y 
+    sudo flatpak update --system -y
+
+    echo "==> Snap"
+    sudo snap refresh
+
+    echo "==> uv tools"
+    uv tool upgrade --all
+
+    echo "==> Cargo binaries"
+    cargo install-update -a 
+
+    echo "==> Go binaries"
+    gup update
+
+    echo "==> npm global"
+    npm update -g
+}
+
 # ─────────────────────────────────────────────
 #  Machine-local overrides and secrets (untracked)
 # ─────────────────────────────────────────────

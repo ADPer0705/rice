@@ -64,6 +64,7 @@ anaconda-install-env-deps
 anaconda-live
 anaconda-tui
 anaconda-webui
+android-tools
 annobin-docs
 annobin-plugin-gcc
 ansible-srpm-macros
@@ -2628,6 +2629,7 @@ pdfio
 perf
 perl-Algorithm-Diff
 perl-Archive-Tar
+perl-Archive-Zip
 perl-Authen-DigestMD5
 perl-Authen-SASL
 perl-autodie
