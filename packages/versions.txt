@@ -2,10 +2,10 @@
 # Regenerate with: bash bin/rice sync
 
 os               Fedora Linux 45 (KDE Plasma Desktop Edition)
-kernel           7.3.4-300.fc45.x86_64
+kernel           7.3.6-300.fc45.x86_64
 
 hyprland         0.57.2
-waybar           [2026-11-27 18:06:12.186] [info] JOURNAL_STREAM does not point to stderr, logging to console
+waybar           [2026-11-28 18:01:50.239] [info] JOURNAL_STREAM does not point to stderr, logging to console
 Waybar v0.16.0
 fuzzel           1.15.0 +cairo +png +svg(nanosvg) -assertions
 ghostty          Ghostty 1.4.0-2.fc45
